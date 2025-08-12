@@ -15,11 +15,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build the application
+# Build the application with standalone output
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
-# Production image, copy all the files and run next
+# Production image for standalone output
 FROM base AS runner
 WORKDIR /app
 
@@ -29,11 +29,12 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy built application
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+# Copy public assets
+COPY --from=builder /app/public ./public
 
-# Copy node_modules for runtime
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+# Copy the standalone output
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
@@ -42,9 +43,8 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# Health check using wget (available in alpine)
+# Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
 
-# Start the application
-CMD ["npx", "next", "start"]
+CMD ["node", "server.js"]
