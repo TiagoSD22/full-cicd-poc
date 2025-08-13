@@ -1,0 +1,86 @@
+# Git ignore patterns
+.git/
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+*.pid
+*.seed
+.coverage
+.nyc_output
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Test outputs
+test-results.xml
+coverage/
+.pytest_cache/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Terraform/OpenTofu
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+*.tfplan
+*.tfvars
+
+# Jenkins
+jenkins_home/
+
+# Docker
+.docker/
+
+# Monitoring data
+prometheus_data/
+grafana_data/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Kubernetes
+*.kubeconfig
+kube-config
