@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infra-kata
+  namespace: argocd
+spec:
+  description: Infrastructure Kata Project
+  sourceRepos:
+  - '__GIT_REPO_URL__'
+  destinations:
+  - namespace: applications
+    server: https://kubernetes.default.svc
+  - namespace: infrastructure
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+  - group: ''
+    kind: PersistentVolume
+  - group: storage.k8s.io
+    kind: StorageClass
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+  namespaceResourceWhitelist:
+  - group: ''
+    kind: '*'
+  - group: apps
+    kind: '*'
+  - group: networking.k8s.io
+    kind: '*'
+  - group: extensions
+    kind: '*'
+  - group: autoscaling
+    kind: '*'
+  - group: batch
+    kind: '*'
+  - group: policy
+    kind: '*'
+  - group: rbac.authorization.k8s.io
+    kind: '*'
+  roles:
+  - name: admin
+    description: Admin role for infra-kata project
+    policies:
+    - p, proj:infra-kata:admin, applications, *, infra-kata/*, allow
+    - p, proj:infra-kata:admin, repositories, *, *, allow
+    groups:
+    - argocd-admins
